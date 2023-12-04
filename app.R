@@ -1,8 +1,8 @@
-quickcode::libraryAll(shiny, shinyjs)
+quickcode::clean(clearPkgs = TRUE) #clean environment, and remove previously loaded packages to avoid contamination
+quickcode::libraryAll(shiny, shinyjs) #load key libraries and print a message with loaded libraries and versions
+env1 <- new.env() #create environment for the app
 
-env1 <- new.env()
-
-
+#----------SCALABLE TIME MODULE FUNCTIONS--------------------------------
 
 initalizeTime <- function(v,t) {
   if (!inherits(env1[[t]], "numeric")) {
@@ -17,23 +17,6 @@ initalizeTime <- function(v,t) {
 formattime <- function(t){
   if(is.numeric(t))sprintf("%s:%02d", floor(as.numeric(t) / 60), as.numeric(t) %% 60)
 }
-  
-
-# Define UI for displaying current time ----
-ui <- fluidPage(
-  useShinyjs(),
-  numericInput("unittime","Enter time (minutes)",1),
-  actionButton("startt", "START/RESTART"),
-  actionButton("add1", "add 1min"),
-  actionButton("pause", "PAUSE/CONTINUE"),
-  h2(textOutput("currentTime")),
-  hr(),hr(),
-  numericInput("unittime2","Enter time (minutes)",2),
-  actionButton("startt2", "START/RESTART"),
-  actionButton("add12", "add 1min"),
-  actionButton("pause2", "PAUSE/CONTINUE"),
-  h2(textOutput("currentTime2"))
-)
 
 timerServer <- function(input, output, session,t1 = "time1",add = "add1",start = "startt",inTime = "unittime",outTime = "currentTime", pause ="pause"){
   env1[[t1]] <- "0"
@@ -60,6 +43,26 @@ timerServer <- function(input, output, session,t1 = "time1",add = "add1",start =
     if(env1[[t1]] !="0")paste(formattime(env1[[t1]])) else "0:00"
   })
 }
+
+
+
+#----------CREATE AN APP TO SHOW FUNCTIONALITY--------------------------------
+
+# Define UI for displaying current time ----
+ui <- fluidPage(
+  useShinyjs(),
+  numericInput("unittime","Enter time (minutes)",1),
+  actionButton("startt", "START/RESTART"),
+  actionButton("add1", "add 1min"),
+  actionButton("pause", "PAUSE/CONTINUE"),
+  h2(textOutput("currentTime")),
+  hr(),hr(),
+  numericInput("unittime2","Enter time (minutes)",2),
+  actionButton("startt2", "START/RESTART"),
+  actionButton("add12", "add 1min"),
+  actionButton("pause2", "PAUSE/CONTINUE"),
+  h2(textOutput("currentTime2"))
+)
 
 # Define server logic to show current time, update every second ----
 server <- function(input, output, session) {
