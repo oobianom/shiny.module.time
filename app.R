@@ -15,7 +15,7 @@ initalizeTime <- function(v,t) {
 }
 
 formattime <- function(t){
-  if(is.numeric(t))sprintf("%s:%02d", floor(as.numeric(t) / 60), as.numeric(t) %% 60)
+  if(is.numeric(t))sprintf("%s:%02d", floor(t / 60), t %% 60)
 }
 
 timerServer <- function(input, output, session,t1 = "time1",add = "add1",start = "startt",inTime = "unittime",outTime = "currentTime", pause ="pause"){
