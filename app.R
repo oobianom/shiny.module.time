@@ -1,6 +1,6 @@
 quickcode::clean(clearPkgs = TRUE) #clean environment, and remove previously loaded packages to avoid contamination
-quickcode::libraryAll(shiny, shinyjs) #load key libraries and print a message with loaded libraries and versions
-env1 <- new.env() #create environment for the app
+quickcode::libraryAll(shiny) #load key libraries and print a message with loaded libraries and versions
+
 
 #----------SCALABLE TIME MODULE FUNCTIONS--------------------------------
 
@@ -47,16 +47,20 @@ timerServer <- function(input, output, session,t1 = "time1",add = "add1",start =
 
 
 #----------CREATE AN APP TO SHOW FUNCTIONALITY--------------------------------
+env1 <- new.env() #create environment for the app
 
 # Define UI for displaying current time ----
 ui <- fluidPage(
-  useShinyjs(),
+
+  # timer 1 UI
   numericInput("unittime","Enter time (minutes)",1),
   actionButton("startt", "START/RESTART"),
   actionButton("add1", "add 1min"),
   actionButton("pause", "PAUSE/CONTINUE"),
   h2(textOutput("currentTime")),
   hr(),hr(),
+
+  # timer 2 UI
   numericInput("unittime2","Enter time (minutes)",2),
   actionButton("startt2", "START/RESTART"),
   actionButton("add12", "add 1min"),
@@ -66,7 +70,7 @@ ui <- fluidPage(
 
 # Define server logic to show current time, update every second ----
 server <- function(input, output, session) {
-  
+  # trigger time 1
   timerServer(input, output, session,
               t1 = "time1",
               add = "add1",
@@ -74,7 +78,8 @@ server <- function(input, output, session) {
               inTime = "unittime",
               outTime = "currentTime", 
               pause ="pause")
-  
+
+  # trigger time 2
   timerServer(input, output, session,
               t1 = "time2",
               add = "add12",
